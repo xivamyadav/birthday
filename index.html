@@ -965,6 +965,8 @@
         // ===== BALLOONS =====
         function createBalloon() {
             const c = document.getElementById('balloonContainer');
+            if (c.childElementCount > 35) return; // Limit maximum balloons to prevent lag
+
             const b = document.createElement('div');
             b.className = 'balloon';
             b.style.background = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
@@ -986,7 +988,7 @@
 
         // ===== CONFETTI =====
         function launchConfetti() {
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
                     const c = document.createElement('div');
                     c.className = 'confetti-piece';
@@ -1024,14 +1026,19 @@
             setTimeout(() => fw.remove(), 1500);
         }
 
+        let isFireworksActive = false;
         function launchFireworks() {
+            if (isFireworksActive) return; // Prevent spamming
+            isFireworksActive = true;
+            setTimeout(() => { isFireworksActive = false; }, 3000); // 3 second cooldown
+
             launchConfetti();
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.6);
                 }, i * 250);
             }
-            for (let i = 0; i < 12; i++) setTimeout(() => createBalloon(), i * 120);
+            for (let i = 0; i < 8; i++) setTimeout(() => createBalloon(), i * 150);
         }
 
         // ===== SPARKLE =====
